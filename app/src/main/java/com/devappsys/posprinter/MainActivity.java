@@ -20,13 +20,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Button btnPRint = findViewById(R.id.btnPrint);
         btnPRint.setOnClickListener(view -> {
+            openPrinterDevice();
             printData();
+            closePrinter();
         });
 
     }
-
-
-    private void printData() {
+    private void openPrinterDevice(){
         //Getting the POS printerDevice object reference
         if (device == null) {
             device = (PrinterDevice) POSTerminal.getInstance(this)
@@ -39,7 +39,10 @@ public class MainActivity extends AppCompatActivity {
         } catch (DeviceException e) {
             e.printStackTrace();
         }
+    }
 
+
+    private void printData() {
         //Once the device is open we can send our text to print
         try {
             device.printText(
@@ -59,6 +62,15 @@ public class MainActivity extends AppCompatActivity {
         } catch (DeviceException e) {
             e.printStackTrace();
 
+        }
+    }
+
+    private void closePrinter(){
+        //close the device after printing
+        try{
+            device.close();
+        } catch (DeviceException e) {
+            e.printStackTrace();
         }
     }
 
